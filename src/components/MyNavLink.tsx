@@ -10,7 +10,6 @@ import {
 const activeLink = classnames(
   borders("border-b-2"),
   borderColor("border-indigo-500"),
-
   textColor("hover:text-indigo-500")
 );
 const nonActiveLink = classnames(textColor("hover:text-indigo-500"));
@@ -25,7 +24,7 @@ const MyNavLink = ({ to, children, className }: MyNavLinkProps) => {
   return (
     <NavLink
       className={({ isActive }) =>
-        `${isActive ? activeLink : nonActiveLink} ${className || ""}`
+        `${isActive ? activeLink : nonActiveLink} px-2 py-4 ${className || ""}`
       }
       to={to}
     >

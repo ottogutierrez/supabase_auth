@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Modal from "./Modal";
 import SignIn from "./SignIn";
+import { useAuth } from "../utils/authHook";
 
 function AuthBtns() {
   const [open, setOpen] = useState(false);
-
-  return (
+  const { session } = useAuth();
+  const { signOut } = useAuth();
+  return !session ? (
     <div className="flex text-base">
       <button
         className="px-2 hover:text-indigo-500 focus:text-red-300"
@@ -19,6 +21,10 @@ function AuthBtns() {
       <Modal open={open} onClose={() => setOpen(false)}>
         <SignIn onClose={() => setOpen(false)} />
       </Modal>
+    </div>
+  ) : (
+    <div className="flex text-base">
+      <button onClick={signOut}>Sign Out</button>
     </div>
   );
 }
