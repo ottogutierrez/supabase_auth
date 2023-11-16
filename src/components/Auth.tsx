@@ -5,6 +5,7 @@ import { Session } from "@supabase/supabase-js";
 export interface IAuthContext {
   session: Session | null;
   loading: boolean;
+  signUp: (email:string,password:string)=>Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -16,6 +17,7 @@ interface AuthProviderProps {
 export const AuthContext = createContext<IAuthContext>({
   session: null,
   loading: false,
+  signUp: async () => {},
   signIn: async () => {},
   signOut: async () => {},
 });
@@ -38,6 +40,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const value = {
     session,
     loading,
+    signUp: async (email: string, password: string) => {
+      setLoading(true);
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+      });
+      setLoading(false);
+      if (error) throw error;
+      setSession(data.session);
+      console.log(`Signed up!: ${session?.user.email}`);
+    },
     signIn: async (email: string, password: string) => {
       setLoading(true);
       const { data, error } = await supabase.auth.signInWithPassword({
